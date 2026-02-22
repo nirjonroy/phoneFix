@@ -8,8 +8,6 @@
 @endphp
 @section('title', $SeoSettings ? $SeoSettings->seo_title : 'All Services')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('frontend/css/home.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/food.css') }}">
 @endpush
 
 @section('seos')
@@ -55,87 +53,67 @@
 @endsection
 
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url({{asset('frontend/assets/images/about_bg.webp')}})">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>All Services </h1>
-            <p> </p>
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="index.html">Home</a></li>
-                <li><span>//</span></li>
-                <li>All Services</li>
-            </ul>
-        </div>
-    </div>
-</section>
-<!--Page Header End-->
-
-<!--About Two Start-->
-<section class="about-one">
-    <div class="about-one__bg float-bob-y" style="background-image: url({{asset('frontend/assets/images/backgrounds/about-one-bg-img-1.jpg')}});">
-    </div>
-    <div class="container">
-        <div class="section-title text-center">
-
-            <h2 class="section-title__title">Welcome To DC Phone
-                <br>All Services</h2>
-        </div>
-        <div class="row">
-            <div class="col-xl-6 col-lg-6">
-                <div class="about-one__left">
-                    <div class="about-one__img wow slideInLeft" data-wow-delay="100ms" data-wow-duration="2500ms">
-                        <img src="{{asset('frontend/assets/images/resources/about-1-1.jpg')}}" alt="">
-                        <div class="about-one__our-goal">
-                            <p class="about-one__our-goal-sub-title">What You Wanna Fix:</p>
-                            <h3 class="about-one__our-goal-title">"Smartphone or Laptop"</h3>
-                        </div>
-                    </div>
-                </div>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Services</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">Services</li>
+                </ul>
             </div>
-            <div class="col-xl-6 col-lg-6">
-                <div class="about-one__right">
-                    {{-- <div class="section-title text-left">
-                        <span class="section-title__tagline">OUR INTRODUCTION</span>
-                        <h2 class="section-title__title">Welcome To Smartphone & Laptop Repair Service Center</h2>
-                    </div>
-                    <p class="about-one__right-text-1">Black Tech Black Tech</p> --}}
-                    <ul class="about-one__points list-unstyled">
-                        @foreach ($all_service as $key => $item)
-                        <li>
-                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">
-                            <div class="about-one__points-single">
-                                <div class="about-one__points-icon">
-                                    <span class="">
-                                        @if(!empty($item->image))
-                                        <img src="{{ asset($item->image) }}" alt="" class="img-fluid" width="40px" height="50px">
-                                        @endif
-                                    </span>
+        </div>
+        <!-- breadcrumb end -->
+
+
+        <!-- service-area -->
+        <div class="service-area2 bg py-120">
+            <div class="container">
+                <div class="row">
+                    @forelse($all_service as $item)
+                        @php
+                            $delay = number_format(0.25 + (0.25 * ($loop->index % 3)), 2);
+                            $serviceImageIndex = str_pad((($loop->index % 6) + 1), 2, '0', STR_PAD_LEFT);
+                            $serviceImage = $phoneFixAsset . '/img/service/' . $serviceImageIndex . '.jpg';
+                            $serviceIcon = $item->image ? asset($item->image) : ($phoneFixAsset . '/img/icon/repair.svg');
+                        @endphp
+                        <div class="col-md-6 col-lg-4">
+                            <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ $delay }}s">
+                                <div class="service-img">
+                                    <img src="{{ $serviceImage }}" alt="{{ $item->name }}">
                                 </div>
-                                <div class="about-one__points-text">
-                                    <h3 class="about-one__points-title">{{ $item->name }}</h3>
-                                    <p class="about-one__points-subtitle">{!! Str::limit($item->short_description, 80, ' ...') !!}
-                                    </p>
+                                <div class="service-item-wrap">
+                                    <div class="service-icon">
+                                        <img src="{{ $serviceIcon }}" alt="{{ $item->name }}">
+                                    </div>
+                                    <div class="service-content">
+                                        <h3 class="service-title">
+                                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">{{ $item->name }}</a>
+                                        </h3>
+                                        <p class="service-text">
+                                            {{ Str::limit($item->short_description ?? '', 120) }}
+                                        </p>
+                                        <div class="service-arrow">
+                                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}" class="theme-btn"> Read More<i class="fas fa-arrow-right"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            </a>
-                        </li>
-                        @endforeach
-
-
-                    </ul>
-                    <a href="{{route('front.contact')}}" class="thm-btn">Contact Us</a>
+                        </div>
+                    @empty
+                        <div class="col-lg-12">
+                            <p class="text-center">No services found.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
-    </div>
-</section>
+        <!-- service-area -->
+
+</main>
 @endsection

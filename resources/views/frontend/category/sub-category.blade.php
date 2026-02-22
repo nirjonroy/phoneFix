@@ -52,78 +52,111 @@
 @endsection
 
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+    $categoryName = $currentCategory?->name ?? 'Services';
+    $categoryDescription = $currentCategory?->short_description ?: ($currentCategory?->seo_description ?: '');
+    $heroImage = $currentCategory?->image ? asset($currentCategory->image) : $phoneFixAsset . '/img/service/single.jpg';
+    $firstSub = $categories->first();
+    $secondSub = $categories->skip(1)->first();
+    $detailImageOne = $firstSub?->image ? asset($firstSub->image) : $phoneFixAsset . '/img/service/01.jpg';
+    $detailImageTwo = $secondSub?->image ? asset($secondSub->image) : $phoneFixAsset . '/img/service/02.jpg';
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url(https://unicktheme.com/demo2023/fixnix/assets/images/backgrounds/page-header-bg.jpg)">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>{{ $categories[0]->category->name }}</h1>
-            <p>{{ $categories[0]->category->short_description }} </p>
-
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="">Home</a></li>
-                <li><span>//</span></li>
-                <li>Services</li>
-                <li><span>//</span></li>
-                <li>{{ $categories[0]->category->name }}</li>
-
-
-            </ul>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ $categoryName }}</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">{{ $categoryName }}</li>
+                </ul>
+            </div>
         </div>
-    </div>
-</section>
-<!--Page Header End-->
+        <!-- breadcrumb end -->
 
-<!--Services Two Start-->
-<section class="services-two">
-    <div class="container">
-        {{-- <div class="section-title section-title--two text-center">
-            <span class="section-title__tagline">OUR SERVICES</span>
-            <h2 class="section-title__title">Our Efficient Solution</h2>
-            <p class="section-title__text">Duis aute irure dolor in repreh enderit in volup tate velit esse cillum dolore <br> eu fugiat nulla dolor atur with Lorem ipsum is simply</p>
-        </div> --}}
-        <div class="row">
 
-            <!--Services Two Single Start-->
-            @forelse($categories as $key => $subCategory)
-            
-            <div class="col-xl-3 col-lg-3 col-md-3 wow fadeInUp" data-wow-delay="100ms">
-                <a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">
-                <div class="services-two__single">
-                    <div class="services-two__single-inner">
-                        <div class="">
-                            <span class="">
-                                @if($subCategory)
-                                                    <img src="{{ asset($subCategory->image) }}" class="img-responsive" style="width: auto; height: 160px; display: block; margin: 0 auto;">
-                                                    @else
-                                                    <!--<img class="img-responsive" src="img_chania.jpg" alt="Chania" />-->
-                                                    <img src="{{ asset('frontend/nothing.png') }}" class="img-responsive" style="width: 61px; height: 71px; display: block; margin: 0 auto;">
-                                                    @endif
-                            </span>
+        <!-- service-single -->
+        <div class="service-single-area py-120">
+            <div class="container">
+                <div class="service-single-wrapper">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4">
+                            <div class="service-sidebar">
+                                <div class="widget category">
+                                    <h4 class="widget-title">All Services</h4>
+                                    <div class="category-list">
+                                        @foreach(categories() as $item)
+                                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">
+                                                <i class="far fa-angle-double-right"></i>{{ $item->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="widget service-download">
+                                    <h4 class="widget-title">Need Help?</h4>
+                                    <a href="{{ route('front.contact') }}"><i class="far fa-file-alt"></i> Contact Our Team</a>
+                                    @php
+                                        $servicePhone = siteInfo()->topbar_phone ?? '';
+                                        $serviceTel = $servicePhone ? preg_replace('/[^0-9+]/', '', $servicePhone) : '';
+                                    @endphp
+                                    <a href="{{ $serviceTel ? 'tel:' . $serviceTel : '#' }}"><i class="far fa-phone"></i> Call Now</a>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="services-two__title"><a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">
-                            {{ $subCategory->name }}
-                        </a></h3>
-                        {{-- <p class="services-two__text">Duis aute irure dolor in repreh enderit in volup tate velit esse cillum dolore fugiat nulla dolor atur</p> --}}
+                        <div class="col-xl-8 col-lg-8">
+                            <div class="service-details">
+                                <div class="service-details-img mb-30">
+                                    <img src="{{ $heroImage }}" alt="{{ $categoryName }}">
+                                </div>
+                                <div class="service-details">
+                                    <h3 class="mb-30">{{ $categoryName }}</h3>
+                                    @if($categoryDescription)
+                                        <p class="mb-20">{{ strip_tags($categoryDescription) }}</p>
+                                    @endif
+                                    <p class="mb-20">
+                                        We provide reliable, fast repairs for a wide range of devices. Browse the options below and choose the exact service you need.
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-20">
+                                            <img src="{{ $detailImageOne }}" alt="{{ $categoryName }}">
+                                        </div>
+                                        <div class="col-md-6 mb-20">
+                                            <img src="{{ $detailImageTwo }}" alt="{{ $categoryName }}">
+                                        </div>
+                                    </div>
+                                    <p class="mb-20">
+                                        Our technicians diagnose issues quickly and use quality parts to ensure long-lasting fixes. Book today for expert service.
+                                    </p>
+                                    <div class="my-4">
+                                        <div class="mb-3">
+                                            <h3 class="mb-3">Service Options</h3>
+                                            <p>Select the specific repair option from this category.</p>
+                                        </div>
+                                        <ul class="service-single-list">
+                                            @forelse($categories as $subCategory)
+                                                <li><i class="far fa-check"></i><a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">{{ $subCategory->name }}</a></li>
+                                            @empty
+                                                <li><i class="far fa-check"></i>No services available right now.</li>
+                                            @endforelse
+                                        </ul>
+                                    </div>
+                                    <div class="my-4">
+                                        <h3 class="mb-3">Why Choose Us</h3>
+                                        <p>Clear estimates, trusted technicians, and fast turnaround. We treat your device like our own.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </a>
             </div>
-            
-            @endforeach
-            <!--Services Two Single End-->
         </div>
-    </div>
-</section>
+        <!-- service-single end-->
+
+</main>
 @endsection
 
 @push('js')
-    <!--<script src="{{ asset('frontend/silck/slick.min.js') }}"></script>-->
 @endpush

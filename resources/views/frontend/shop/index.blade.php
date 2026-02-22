@@ -81,107 +81,112 @@
 
 @endpush
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+    $heroImage = $contextCategory?->image ? asset($contextCategory->image) : ($firstService?->thumb_image ? asset($firstService->thumb_image) : $phoneFixAsset . '/img/service/single.jpg');
+    $detailImageOne = ($services instanceof \Illuminate\Support\Collection && $services->count()) ? asset($services->first()->thumb_image) : $phoneFixAsset . '/img/service/01.jpg';
+    $detailImageTwo = ($services instanceof \Illuminate\Support\Collection && $services->count() > 1) ? asset($services->skip(1)->first()->thumb_image) : $phoneFixAsset . '/img/service/02.jpg';
+    $primaryDescription = $headerDescription ?: 'We provide fast, reliable repairs for phones, tablets, and computers using quality parts and expert technicians.';
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url({{asset('frontend/assets/images/single_serv.jpg')}});">
-    </div>
-    @php
-        $heroPhone = siteInfo()->topbar_phone;
-        $heroTel = $heroPhone ? preg_replace('/[^0-9+]/', '', $heroPhone) : '';
-    @endphp
-    <div class="container">
-        <div class="page-header__inner text-center">
-            <h1>{{ $headerTitle }}</h1>
-            @if($headerDescription)
-                <p>{{ $headerDescription }}</p>
-            @endif
-            <div class="page-header__btn-box text-center" style="margin-top: 18px;">
-                <a href="{{route('front.contact')}}" class="thm-btn d-none d-md-inline-block">Schedule An Appointment Today</a>
-                <a href="{{ $heroTel ? 'tel:' . $heroTel : '#' }}" class="thm-btn d-inline-block d-md-none">Schedule An Appointment Today</a>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ $headerTitle }}</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">{{ $headerTitle }}</li>
+                </ul>
             </div>
-            <ul class="thm-breadcrumb list-unstyled" style="justify-content:center;">
-                <li><a href="{{ route('front.home') }}">Home</a></li>
-                <li><span>//</span></li>
-                <li><a href="{{ route('front.repair.all') }}">Services</a></li>
-                @if($category)
-                    <li><span>//</span></li>
-                    <li><a href="{{ route('front.services.category', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
-                @endif
-                @if($category && $subCategory)
-                    <li><span>//</span></li>
-                    <li><a href="{{ route('front.services.subcategory', ['category' => $category->slug, 'subcategory' => $subCategory->slug]) }}">{{ $subCategory->name }}</a></li>
-                @endif
-                @if($category && $subCategory && $childCategory)
-                    <li><span>//</span></li>
-                    <li>{{ $childCategory->name }}</li>
-                @endif
-            </ul>
         </div>
-    </div>
-</section>
-<!--Page Header End-->
+        <!-- breadcrumb end -->
 
-<!--Fixing One Start-->
-<section class="fixing-one">
-    <div class="fixing-one__bg float-bob-y" style="background-image: url({{asset('frontend/assets/images/service-bg.jpg')}});"></div>
-    <div class="container">
-        <div class="section-title section-title--two text-center">
-            <span class="section-title__tagline">WHAT WE FIXING</span>
-            <h2 class="section-title__title">Providing device solutions</h2>
-            <!--<p class="section-title__text">Duis aute irure dolor in repreh enderit in volup tate velit esse cillum dolore <br> eu fugiat nulla dolor atur with Lorem ipsum is simply</p>-->
-        </div>
-        <div class="row">
-            <div class="col-xl-4 col-lg-4">
-                <div class="fixing-one__left">
-                    <div class="fixing-one__img">
 
-                        @if($childCategory?->image)
-            <img src="{{ asset($childCategory->image) }}" class="shadow p-3 mb-5 rounded" style="display: block; margin:0 auto;">
-             @elseif($subCategory?->image)
-            <img src="{{ asset($subCategory->image) }}" class="shadow p-3 mb-5 rounded" style="display: block; margin:0 auto;">
-            @elseif($category?->image)
-            <img src="{{ asset($category->image) }}" class="shadow p-3 mb-5 rounded" style="display: block; margin:0 auto;">
-            @endif
+        <!-- service-single -->
+        <div class="service-single-area py-120">
+            <div class="container">
+                <div class="service-single-wrapper">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4">
+                            <div class="service-sidebar">
+                                <div class="widget category">
+                                    <h4 class="widget-title">All Services</h4>
+                                    <div class="category-list">
+                                        @foreach(categories() as $item)
+                                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">
+                                                <i class="far fa-angle-double-right"></i>{{ $item->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="widget service-download">
+                                    <h4 class="widget-title">Need Help?</h4>
+                                    <a href="{{ route('front.contact') }}"><i class="far fa-file-alt"></i> Contact Our Team</a>
+                                    @php
+                                        $servicePhone = siteInfo()->topbar_phone ?? '';
+                                        $serviceTel = $servicePhone ? preg_replace('/[^0-9+]/', '', $servicePhone) : '';
+                                    @endphp
+                                    <a href="{{ $serviceTel ? 'tel:' . $serviceTel : '#' }}"><i class="far fa-phone"></i> Call Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-8">
+                            <div class="service-details">
+                                <div class="service-details-img mb-30">
+                                    <img src="{{ $heroImage }}" alt="{{ $headerTitle }}">
+                                </div>
+                                <div class="service-details">
+                                    <h3 class="mb-30">{{ $headerTitle }}</h3>
+                                    <p class="mb-20">{{ $primaryDescription }}</p>
+                                    <p class="mb-20">
+                                        We handle diagnostics, parts replacement, and full repairs with clear communication and quick turnaround times. Book an appointment and we will guide you through the best solution for your device.
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-20">
+                                            <img src="{{ $detailImageOne }}" alt="{{ $headerTitle }}">
+                                        </div>
+                                        <div class="col-md-6 mb-20">
+                                            <img src="{{ $detailImageTwo }}" alt="{{ $headerTitle }}">
+                                        </div>
+                                    </div>
+                                    <p class="mb-20">
+                                        Our technicians use tested parts and proven repair methods to restore performance and protect your data. We focus on quality and transparency so you know exactly what is being fixed.
+                                    </p>
+                                    <div class="my-4">
+                                        <div class="mb-3">
+                                            <h3 class="mb-3">Our Work Process</h3>
+                                            <p>We start with a full diagnosis, confirm the repair scope, complete the fix with quality parts, then test and clean your device before pickup.</p>
+                                        </div>
+                                        <ul class="service-single-list">
+                                            <li><i class="far fa-check"></i>Free or low-cost initial diagnosis</li>
+                                            <li><i class="far fa-check"></i>Clear estimate before work begins</li>
+                                            <li><i class="far fa-check"></i>Quality parts and expert technicians</li>
+                                            <li><i class="far fa-check"></i>Full testing and cleanup</li>
+                                            <li><i class="far fa-check"></i>Fast turnaround and support</li>
+                                        </ul>
+                                    </div>
+                                    <div class="my-4">
+                                        <h3 class="mb-3">Service Features</h3>
+                                        <p>Explore the repair options available for this service category.</p>
+                                        <ul class="service-single-list">
+                                            @forelse($services as $service)
+                                                <li><i class="far fa-check"></i>{{ $service->name }}</li>
+                                            @empty
+                                                <li><i class="far fa-check"></i>Screen replacement</li>
+                                                <li><i class="far fa-check"></i>Battery replacement</li>
+                                                <li><i class="far fa-check"></i>Diagnostics and troubleshooting</li>
+                                            @endforelse
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-8 col-lg-8">
-                <div class="fixing-one__right">
-                    <div class="fixing-one__points-box">
-                        <ul class="fixing-one__points list-unstyled">
-                            @forelse ($services as $key => $item)
-
-                                <li>
-
-                                    <div class="icon">
-                                        <img class="img-fluid" aria-hidden="true" width="50px" height="50px" src="{{asset($item->thumb_image)}}" alt="
-                      iPhone Repair Services
-                      " id="image_home_card_2" style="background: rgb(255, 255, 255); width:50px; height: 50px">
-                                    </div>
-                                    <a href="{{route('front.single.service', $item->slug)}}">
-                                    <div class="content">
-                                        <h3>{{ $item->name }}</h3>
-                                        <p>{!! Str::limit($item->short_description, 80, ' ...') !!}</p>
-                                    </div>
-                                </a>
-                                </li>
-
-
-                            @endforeach
-
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
-<!--Fixing One End-->
+        <!-- service-single end-->
+
+</main>
 @endsection

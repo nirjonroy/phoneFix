@@ -1,95 +1,140 @@
+@php
+    $setting = siteInfo();
+    $headerPhone = $setting->topbar_phone ?? '';
+    $headerTel = $headerPhone ? preg_replace('/[^0-9+]/', '', $headerPhone) : '';
+    $headerEmail = $setting->topbar_email ?: ($setting->contact_email ?? '');
+@endphp
 
-<header class="main-header">
-    <nav class="main-menu">
-        <div class="main-menu__wrapper">
-            <div class="main-menu__wrapper-inner">
-                <div class="main-menu__left">
-                    <div class="main-menu__logo">
-                        <a href="{{route('front.home')}}"><img src="{{ asset(siteInfo()->logo) }}" style="width:auto; height: 55px" alt=""></a>
+<!-- preloader -->
+<div class="preloader">
+    <div class="loader-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- preloader end -->
+
+<!-- header area -->
+<header class="header">
+
+    <!-- header-top -->
+    <div class="header-top">
+        <div class="container">
+            <div class="header-top-wrap">
+                <div class="header-top-left">
+                    <div class="header-top-social">
+                        <span>Follow Us:</span>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <div class="main-menu__main-menu-box">
-                    <a href="#" class="mobile-nav__toggler"><i class="fa fa-bars"></i></a>
-                    <ul class="main-menu__list">
-                        <li class="dropdown current megamenu">
-                            <a href="{{route('front.home')}}">Home </a>
-
-                        </li>
-                        <li>
-                            <a href="{{route('front.about-us')}}">About</a>
-                        </li>
-                        <!-- <li class="dropdown">
-                            <a href="#">Pages</a>
-                            <ul class="shadow-box">
-                                <li><a href="team.html">Team</a></li>
-                                <li><a href="pricing.html">Pricing</a></li>
-                                <li><a href="appointment.html">Appointment</a></li>
-                                <li><a href="gallery.html">Gallery</a></li>
-                                <li><a href="faq.html">FAQs</a></li>
-                                <li><a href="404.html">404 Error</a></li>
-                            </ul>
-                        </li> -->
-                        <li class="dropdown">
-                            <a href="{{route('front.repair.all')}}">Services</a>
-                            <ul class="shadow-box">
-                                @foreach(categories() as $key => $item)
-                                <li><a href="{{ route('front.services.category', ['category' => $item->slug]) }}">{{$item->name}}</a></li>
-                                @endforeach
-                                <!-- <li><a href="services-details.html">Service Detail</a></li> -->
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="{{route('front.blog')}}">Blog</a>
-                            <!-- <ul class="shadow-box">
-                                <li><a href="blog-v-1.html">Blog V-1</a></li>
-                                <li><a href="blog-v-2.html">Blog V-2</a></li>
-                                <li><a href="blog-details.html">Blog Details V-1</a></li>
-                                <li><a href="blog-details-2.html">Blog Details V-2</a></li>
-                                <li><a href="blog-details-3.html">Blog Details V-3</a></li>
-                            </ul> -->
-                        </li>
-                        <!-- <li class="dropdown">
-                            <a href="#">Shop</a>
-                            <ul class="shadow-box">
-                                <li><a href="products.html">Products</a></li>
-                                <li><a href="product-details.html">Product Details</a></li>
-                                <li><a href="cart.html">Cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                            </ul>
-                        </li> -->
-                        <li>
-                            <a href="{{route('front.contact')}}">Contact</a>
-                        </li>
-                    </ul>
+                <div class="header-top-right">
+                    <div class="header-top-contact">
+                        <ul>
+                            @if($headerPhone)
+                                <li>
+                                    <div class="header-top-contact-info">
+                                        <a href="{{ $headerTel ? 'tel:' . $headerTel : '#' }}"><i class="far fa-phone-volume"></i> {{ $headerPhone }}</a>
+                                    </div>
+                                </li>
+                            @endif
+                            @if($headerEmail)
+                                <li>
+                                    <div class="header-top-contact-info">
+                                        <a href="mailto:{{ $headerEmail }}"><i class="far fa-envelopes"></i> {{ $headerEmail }}</a>
+                                    </div>
+                                </li>
+                            @endif
+                            <li>
+                                <div class="header-top-contact-info">
+                                    <a href="#"><i class="far fa-clock"></i> Sun - Fri (08AM - 10PM)</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="main-menu__right">
-                    <div class="main-menu__search-cart-call-box">
-                        <div class="main-menu__search-cart-box">
-                            <div class="main-menu__search-box">
-                                <a href="#" class="main-menu__search search-toggler ">
-                                    <i class="fas fa-search" style="color:#cf1f1f"></i>
-                                </a>
+            </div>
+        </div>
+    </div>
+    <!-- header-top end -->
+
+    <!-- navbar -->
+    <div class="main-navigation">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container position-relative">
+                <a class="navbar-brand" href="{{ route('front.home') }}">
+                    <img src="{{ asset($setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}">
+                </a>
+                <div class="mobile-menu-right">
+                    <div class="mobile-menu-btn">
+                        <a href="#" class="nav-right-link search-box-outer"><i class="far fa-search"></i></a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <a href="{{ route('front.home') }}" class="offcanvas-brand" id="offcanvasNavbarLabel">
+                            <img src="{{ asset($setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}">
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('front.home') ? 'active' : '' }}" href="{{ route('front.home') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('front.about-us') ? 'active' : '' }}" href="{{ route('front.about-us') }}">About</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Services</a>
+                                <ul class="dropdown-menu fade-down">
+                                    <li><a class="dropdown-item" href="{{ route('front.repair.all') }}">All Services</a></li>
+                                    @foreach(categories() as $item)
+                                        <li><a class="dropdown-item" href="{{ route('front.services.category', ['category' => $item->slug]) }}">{{ $item->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('front.blog') ? 'active' : '' }}" href="{{ route('front.blog') }}">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('front.contact') ? 'active' : '' }}" href="{{ route('front.contact') }}">Contact</a>
+                            </li>
+                        </ul>
+                        <!-- nav-right -->
+                        <div class="nav-right">
+                            <div class="search-btn">
+                                <button type="button" class="nav-right-link search-box-outer"><i class="far fa-search"></i></button>
                             </div>
-                            <!-- <div class="main-menu__cart-box">
-                                <a href="cart.html" class="main-menu__cart fas fa-shopping-cart"></a>
-                            </div> -->
-                        </div>
-                        @php
-                            $headerPhone = siteInfo()->topbar_phone;
-                            $headerTel = $headerPhone ? preg_replace('/[^0-9+]/', '', $headerPhone) : '';
-                        @endphp
-                        <div class="main-menu__call">
-                            <div class="main-menu__call-icon">
-                              <a href="{{ $headerTel ? 'tel:' . $headerTel : '#' }}">  <i class="fas fa-phone" style="color:#ffffff;"></i> </a>
-                            </div>
-                            <div class="main-menu__call-content">
-                                <p class="main-menu__call-sub-title">Call Anytime</p>
-                                <h5 class="main-menu__call-number"><a href="{{ $headerTel ? 'tel:' . $headerTel : '#' }}">{{ $headerPhone }}</a></h5>
+                            <div class="nav-btn">
+                                <a href="{{ route('front.contact') }}" class="theme-btn">Let's Talk <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
+    <!-- navbar end -->
+
 </header>
+<!-- header area end -->
+
+<!-- popup search -->
+<div class="search-popup">
+    <button class="close-search"><span class="far fa-times"></span></button>
+    <form action="{{ route('front.product.search') }}">
+        <div class="form-group">
+            <input type="search" name="query" placeholder="Search Here..." required>
+            <button type="submit"><i class="far fa-search"></i></button>
+        </div>
+    </form>
+</div>
+<!-- popup search end -->
