@@ -8,6 +8,13 @@
 @endphp
 @section('title', $SeoSettings ? $SeoSettings->seo_title : 'All Services')
 @push('css')
+    <style>
+        .service-area2 .service-img img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+    </style>
 @endpush
 
 @section('seos')
@@ -79,7 +86,7 @@
                         @php
                             $delay = number_format(0.25 + (0.25 * ($loop->index % 3)), 2);
                             $serviceImageIndex = str_pad((($loop->index % 6) + 1), 2, '0', STR_PAD_LEFT);
-                            $serviceImage = $phoneFixAsset . '/img/service/' . $serviceImageIndex . '.jpg';
+                            $serviceImage = $item->image ? asset($item->image) : ($phoneFixAsset . '/img/service/' . $serviceImageIndex . '.jpg');
                             $serviceIcon = $item->image ? asset($item->image) : ($phoneFixAsset . '/img/icon/repair.svg');
                         @endphp
                         <div class="col-md-6 col-lg-4">

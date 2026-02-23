@@ -78,15 +78,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 @endsection
 @push('css')
-
+    <style>
+        .solutions-image img {
+            width: 100%;
+            border-radius: 20px;
+        }
+        .solutions-image {
+            margin-top: 0;
+        }
+        .solutions-list .solution-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid #e8e8e8;
+            border-radius: 16px;
+            background: #fff;
+            margin-bottom: 16px;
+        }
+        .solutions-list .solution-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--theme-color);
+            color: #fff;
+            font-size: 26px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .solutions-list .solution-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: none;
+        }
+        .solutions-list .solution-content h5 {
+            margin-bottom: 6px;
+        }
+        .solutions-list .solution-content p {
+            margin-bottom: 0;
+        }
+    </style>
 @endpush
 @section('content')
 @php
     $phoneFixAsset = asset('phone-fix/assets');
     $heroImage = $contextCategory?->image ? asset($contextCategory->image) : ($firstService?->thumb_image ? asset($firstService->thumb_image) : $phoneFixAsset . '/img/service/single.jpg');
-    $detailImageOne = ($services instanceof \Illuminate\Support\Collection && $services->count()) ? asset($services->first()->thumb_image) : $phoneFixAsset . '/img/service/01.jpg';
-    $detailImageTwo = ($services instanceof \Illuminate\Support\Collection && $services->count() > 1) ? asset($services->skip(1)->first()->thumb_image) : $phoneFixAsset . '/img/service/02.jpg';
-    $primaryDescription = $headerDescription ?: 'We provide fast, reliable repairs for phones, tablets, and computers using quality parts and expert technicians.';
+    $descriptionText = $headerDescription ?: 'We provide fast, reliable repairs for phones, tablets, and computers using quality parts and expert technicians.';
 @endphp
 <main class="main">
 
@@ -133,53 +173,47 @@
                         </div>
                         <div class="col-xl-8 col-lg-8">
                             <div class="service-details">
-                                <div class="service-details-img mb-30">
-                                    <img src="{{ $heroImage }}" alt="{{ $headerTitle }}">
+                                <div class="mb-4">
+                                    <h3 class="mb-2">{{ $headerTitle }}</h3>
                                 </div>
-                                <div class="service-details">
-                                    <h3 class="mb-30">{{ $headerTitle }}</h3>
-                                    <p class="mb-20">{{ $primaryDescription }}</p>
-                                    <p class="mb-20">
-                                        We handle diagnostics, parts replacement, and full repairs with clear communication and quick turnaround times. Book an appointment and we will guide you through the best solution for your device.
-                                    </p>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-20">
-                                            <img src="{{ $detailImageOne }}" alt="{{ $headerTitle }}">
-                                        </div>
-                                        <div class="col-md-6 mb-20">
-                                            <img src="{{ $detailImageTwo }}" alt="{{ $headerTitle }}">
+                                <div class="row align-items-start g-4">
+                                    <div class="col-lg-5">
+                                        <div class="solutions-image">
+                                            <img src="{{ $heroImage }}" alt="{{ $headerTitle }}">
                                         </div>
                                     </div>
-                                    <p class="mb-20">
-                                        Our technicians use tested parts and proven repair methods to restore performance and protect your data. We focus on quality and transparency so you know exactly what is being fixed.
-                                    </p>
-                                    <div class="my-4">
-                                        <div class="mb-3">
-                                            <h3 class="mb-3">Our Work Process</h3>
-                                            <p>We start with a full diagnosis, confirm the repair scope, complete the fix with quality parts, then test and clean your device before pickup.</p>
+                                    <div class="col-lg-7">
+                                        <div class="site-heading mb-3">
+                                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> What We Fixing</span>
+                                            <h2 class="site-title">Providing Device <span>Solutions</span></h2>
                                         </div>
-                                        <ul class="service-single-list">
-                                            <li><i class="far fa-check"></i>Free or low-cost initial diagnosis</li>
-                                            <li><i class="far fa-check"></i>Clear estimate before work begins</li>
-                                            <li><i class="far fa-check"></i>Quality parts and expert technicians</li>
-                                            <li><i class="far fa-check"></i>Full testing and cleanup</li>
-                                            <li><i class="far fa-check"></i>Fast turnaround and support</li>
-                                        </ul>
-                                    </div>
-                                    <div class="my-4">
-                                        <h3 class="mb-3">Service Features</h3>
-                                        <p>Explore the repair options available for this service category.</p>
-                                        <ul class="service-single-list">
+                                        <div class="solutions-list">
                                             @forelse($services as $service)
-                                                <li><i class="far fa-check"></i>{{ $service->name }}</li>
+                                                @php
+                                                    $solutionImage = $service->thumb_image ? asset($service->thumb_image) : ($phoneFixAsset . '/img/icon/repair.svg');
+                                                    $solutionLink = route('front.single.service', ['slug' => $service->slug]);
+                                                @endphp
+                                                <div class="solution-item">
+                                                    <div class="solution-icon">
+                                                        <img src="{{ $solutionImage }}" alt="{{ $service->name }}">
+                                                    </div>
+                                                    <div class="solution-content">
+                                                        <h5><a href="{{ $solutionLink }}">{{ $service->name }}</a></h5>
+                                                        <p>{{ Str::limit(strip_tags($service->short_description ?? $service->long_description ?? ''), 120) }}</p>
+                                                    </div>
+                                                </div>
                                             @empty
-                                                <li><i class="far fa-check"></i>Screen replacement</li>
-                                                <li><i class="far fa-check"></i>Battery replacement</li>
-                                                <li><i class="far fa-check"></i>Diagnostics and troubleshooting</li>
+                                                <p>No solutions available yet.</p>
                                             @endforelse
-                                        </ul>
+                                        </div>
                                     </div>
                                 </div>
+                                @if($descriptionText)
+                                    <div class="mt-4">
+                                        <h4 class="mb-2">About {{ $headerTitle }}</h4>
+                                        <p>{{ strip_tags($descriptionText) }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

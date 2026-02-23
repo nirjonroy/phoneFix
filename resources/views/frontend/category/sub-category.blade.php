@@ -1,6 +1,6 @@
 @extends('frontend.app')
 @php
-    $currentCategory = $categories[0]->category ?? null;
+    $currentCategory = $currentCategory ?? ($categories->first()->category ?? null);
     $SeoSettings = DB::table('seo_settings')->where('id', 3)->first();
     $metaTitle = $currentCategory?->meta_title ?: ($currentCategory?->seo_title ?: ($currentCategory?->name ?? 'Services'));
     $metaDescription = $currentCategory?->meta_description ?: ($currentCategory?->seo_description ?: strip_tags($currentCategory?->short_description ?? ''));
@@ -8,6 +8,18 @@
     $siteName = $currentCategory?->site_name ?: ($SeoSettings ? ($SeoSettings->site_name ?: $SeoSettings->seo_title) : '');
 @endphp
 @section('title', $metaTitle)
+@push('css')
+    <style>
+        .service-area2 .service-img img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+        .service-area2 .service-item-wrap ul {
+            margin-bottom: 0;
+        }
+    </style>
+@endpush
 
 @section('seos')
     <meta charset="UTF-8">
@@ -56,11 +68,6 @@
     $phoneFixAsset = asset('phone-fix/assets');
     $categoryName = $currentCategory?->name ?? 'Services';
     $categoryDescription = $currentCategory?->short_description ?: ($currentCategory?->seo_description ?: '');
-    $heroImage = $currentCategory?->image ? asset($currentCategory->image) : $phoneFixAsset . '/img/service/single.jpg';
-    $firstSub = $categories->first();
-    $secondSub = $categories->skip(1)->first();
-    $detailImageOne = $firstSub?->image ? asset($firstSub->image) : $phoneFixAsset . '/img/service/01.jpg';
-    $detailImageTwo = $secondSub?->image ? asset($secondSub->image) : $phoneFixAsset . '/img/service/02.jpg';
 @endphp
 <main class="main">
 
@@ -107,46 +114,50 @@
                         </div>
                         <div class="col-xl-8 col-lg-8">
                             <div class="service-details">
-                                <div class="service-details-img mb-30">
-                                    <img src="{{ $heroImage }}" alt="{{ $categoryName }}">
+                                <div class="mb-4">
+                                    <h3 class="mb-2">{{ $categoryName }} Sub Categories</h3>
+                                    <p>Select a sub category to see all available child services.</p>
                                 </div>
-                                <div class="service-details">
-                                    <h3 class="mb-30">{{ $categoryName }}</h3>
-                                    @if($categoryDescription)
-                                        <p class="mb-20">{{ strip_tags($categoryDescription) }}</p>
-                                    @endif
-                                    <p class="mb-20">
-                                        We provide reliable, fast repairs for a wide range of devices. Browse the options below and choose the exact service you need.
-                                    </p>
+                                <div class="service-area2">
                                     <div class="row">
-                                        <div class="col-md-6 mb-20">
-                                            <img src="{{ $detailImageOne }}" alt="{{ $categoryName }}">
-                                        </div>
-                                        <div class="col-md-6 mb-20">
-                                            <img src="{{ $detailImageTwo }}" alt="{{ $categoryName }}">
-                                        </div>
-                                    </div>
-                                    <p class="mb-20">
-                                        Our technicians diagnose issues quickly and use quality parts to ensure long-lasting fixes. Book today for expert service.
-                                    </p>
-                                    <div class="my-4">
-                                        <div class="mb-3">
-                                            <h3 class="mb-3">Service Options</h3>
-                                            <p>Select the specific repair option from this category.</p>
-                                        </div>
-                                        <ul class="service-single-list">
-                                            @forelse($categories as $subCategory)
-                                                <li><i class="far fa-check"></i><a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">{{ $subCategory->name }}</a></li>
-                                            @empty
-                                                <li><i class="far fa-check"></i>No services available right now.</li>
-                                            @endforelse
-                                        </ul>
-                                    </div>
-                                    <div class="my-4">
-                                        <h3 class="mb-3">Why Choose Us</h3>
-                                        <p>Clear estimates, trusted technicians, and fast turnaround. We treat your device like our own.</p>
+                                        @forelse($categories as $subCategory)
+                                            @php
+                                                $subImage = $subCategory->image ? asset($subCategory->image) : ($phoneFixAsset . '/img/service/01.jpg');
+                                                $subIcon = $phoneFixAsset . '/img/icon/repair.svg';
+                                            @endphp
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 2)), 2) }}s">
+                                                    <div class="service-img">
+                                                        <img src="{{ $subImage }}" alt="{{ $subCategory->name }}">
+                                                    </div>
+                                                    <div class="service-item-wrap">
+                                                        <div class="service-icon">
+                                                            <img src="{{ $subIcon }}" alt="{{ $subCategory->name }}">
+                                                        </div>
+                                                        <div class="service-content">
+                                                            <h3 class="service-title">
+                                                                <a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">{{ $subCategory->name }}</a>
+                                                            </h3>
+                                                            <p class="service-text">
+                                                                {{ Str::limit(strip_tags($subCategory->short_description ?? ''), 110) }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="col-12">
+                                                <p class="text-center">No sub categories available right now.</p>
+                                            </div>
+                                        @endforelse
                                     </div>
                                 </div>
+                                @if($categoryDescription)
+                                    <div class="mt-4">
+                                        <h4 class="mb-2">About {{ $categoryName }}</h4>
+                                        <p>{{ strip_tags($categoryDescription) }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -191,7 +191,10 @@ class HomeController extends Controller
     public function servicesCategory($category)
     {
         $categoryModel = Category::whereSlug($category)->firstOrFail();
-        $categories = SubCategory::where(['category_id' => $categoryModel->id])
+        $categories = SubCategory::with(['childCategories' => function ($query) {
+                $query->where('status', 1)->orderBy('serial', 'ASC')->orderBy('id', 'DESC');
+            }])
+            ->where(['category_id' => $categoryModel->id])
             ->orderBy('serial', 'ASC')
             ->where('status', 1)
             ->latest()
@@ -203,7 +206,10 @@ class HomeController extends Controller
             return view('frontend.shop.index', compact('services', 'feateuredCategories'));
         }
 
-        return view('frontend.category.sub-category', compact('categories'));
+        return view('frontend.category.sub-category', [
+            'categories' => $categories,
+            'currentCategory' => $categoryModel,
+        ]);
     }
 
     public function servicesSubCategory($category, $subcategory)
@@ -213,7 +219,8 @@ class HomeController extends Controller
             ->where('category_id', $categoryModel->id)
             ->firstOrFail();
 
-        $categories = ChildCategory::where(['sub_category_id' => $subCategory->id])
+        $categories = ChildCategory::with(['subCategory', 'category'])
+            ->where(['sub_category_id' => $subCategory->id, 'status' => 1])
             ->orderBy('serial', 'ASC')
             ->orderBy('id', 'DESC')
             ->get();
@@ -224,7 +231,11 @@ class HomeController extends Controller
             return view('frontend.shop.index', compact('services', 'feateuredCategories'));
         }
 
-        return view('frontend.category.child-category', compact('categories'));
+        return view('frontend.category.child-category', [
+            'categories' => $categories,
+            'currentSubCategory' => $subCategory,
+            'currentCategory' => $categoryModel,
+        ]);
     }
 
     public function servicesChildCategory($category, $subcategory, $child)

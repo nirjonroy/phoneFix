@@ -1,6 +1,7 @@
 @extends('frontend.app')
 @php
-    $currentSubCategory = $categories[0]->subCategory ?? null;
+    $currentSubCategory = $currentSubCategory ?? ($categories->first()->subCategory ?? null);
+    $currentCategory = $currentCategory ?? ($currentSubCategory?->category ?? ($categories->first()->category ?? null));
     $SeoSettings = DB::table('seo_settings')->where('id', 3)->first();
     $metaTitle = $currentSubCategory?->meta_title ?: ($currentSubCategory?->seo_title ?: ($currentSubCategory?->name ?? 'Services'));
     $metaDescription = $currentSubCategory?->meta_description ?: ($currentSubCategory?->seo_description ?: strip_tags($currentSubCategory?->short_description ?? ''));
@@ -51,85 +52,123 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 @endsection
 
+@push('css')
+    <style>
+        .service-area2 .service-img img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+@endpush
+
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+    $categoryName = $currentCategory?->name ?? 'Services';
+    $subCategoryName = $currentSubCategory?->name ?? 'Services';
+    $subCategoryDescription = $currentSubCategory?->short_description ?: ($currentSubCategory?->seo_description ?: '');
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url(https://unicktheme.com/demo2023/fixnix/assets/images/backgrounds/page-header-bg.jpg)">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>{{ $categories[0]->category->name }}</h1>
-            <p>{{ $categories[0]->category->short_description }} </p>
-
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="">Home</a></li>
-                <li><span>//</span></li>
-                <li>Services</li>
-                <li><span>//</span></li>
-                <li>{{ $categories[0]->category->name }}</li>
-
-
-            </ul>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ $subCategoryName }}</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li><a href="{{ route('front.services.category', ['category' => $currentCategory?->slug ?? '']) }}">{{ $categoryName }}</a></li>
+                    <li class="active">{{ $subCategoryName }}</li>
+                </ul>
+            </div>
         </div>
-    </div>
-</section>
-<!--Page Header End-->
+        <!-- breadcrumb end -->
 
-<!--Services Two Start-->
-<section class="services-two">
-    <div class="container">
-        {{-- <div class="section-title section-title--two text-center">
-            <span class="section-title__tagline">OUR SERVICES</span>
-            <h2 class="section-title__title">Our Efficient Solution</h2>
-            <p class="section-title__text">Duis aute irure dolor in repreh enderit in volup tate velit esse cillum dolore <br> eu fugiat nulla dolor atur with Lorem ipsum is simply</p>
-        </div> --}}
-        <div class="row">
 
-            <!--Services Two Single Start-->
-            @forelse($categories as $key => $subCategory)
-            <div class="col-xl-3 col-lg-3 col-md-3 wow fadeInUp" data-wow-delay="100ms">
-                <a href="{{ route('front.services.childcategory', [
-                            'category' => $subCategory->category->slug,
-                            'subcategory' => $subCategory->subCategory->slug,
-                            'child' => $subCategory->slug
-                            ] ) }}">
-                <div class="services-two__single">
-                    <div class="services-two__single-inner">
-                        <div class="">
-                            <span class="">
-                                @if($subCategory)
-                                                    <img src="{{ asset($subCategory->image) }}" class="img-responsive" style="width: 140px; height: 200px; display: block; margin: 0 auto;">
-                                                    @else
-                                                    <!--<img class="img-responsive" src="img_chania.jpg" alt="Chania" />-->
-                                                    <img src="{{ asset('frontend/nothing.png') }}" class="img-responsive" style="width: 61px; height: 71px; display: block; margin: 0 auto;">
-                                                    @endif
-                            </span>
+        <!-- service-single -->
+        <div class="service-single-area py-120">
+            <div class="container">
+                <div class="service-single-wrapper">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4">
+                            <div class="service-sidebar">
+                                <div class="widget category">
+                                    <h4 class="widget-title">All Services</h4>
+                                    <div class="category-list">
+                                        @foreach(categories() as $item)
+                                            <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">
+                                                <i class="far fa-angle-double-right"></i>{{ $item->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="widget service-download">
+                                    <h4 class="widget-title">Need Help?</h4>
+                                    <a href="{{ route('front.contact') }}"><i class="far fa-file-alt"></i> Contact Our Team</a>
+                                    @php
+                                        $servicePhone = siteInfo()->topbar_phone ?? '';
+                                        $serviceTel = $servicePhone ? preg_replace('/[^0-9+]/', '', $servicePhone) : '';
+                                    @endphp
+                                    <a href="{{ $serviceTel ? 'tel:' . $serviceTel : '#' }}"><i class="far fa-phone"></i> Call Now</a>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="services-two__title"><a href="{{ route('front.services.childcategory', [
-                            'category' => $subCategory->category->slug,
-                            'subcategory' => $subCategory->subCategory->slug,
-                            'child' => $subCategory->slug
-                            ] ) }}">
-                            {{ $subCategory->name }}
-                        </a></h3>
-                        {{-- <p class="services-two__text">Duis aute irure dolor in repreh enderit in volup tate velit esse cillum dolore fugiat nulla dolor atur</p> --}}
+                        <div class="col-xl-8 col-lg-8">
+                            <div class="service-details">
+                                <div class="mb-4">
+                                    <h3 class="mb-2">{{ $subCategoryName }}</h3>
+                                </div>
+                                <div class="service-area2">
+                                    <div class="row">
+                                        @forelse($categories as $childCategory)
+                                            @php
+                                                $childImage = $childCategory->image ? asset($childCategory->image) : ($phoneFixAsset . '/img/service/02.jpg');
+                                                $childIcon = $phoneFixAsset . '/img/icon/repair.svg';
+                                            @endphp
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 2)), 2) }}s">
+                                                    <div class="service-img">
+                                                        <img src="{{ $childImage }}" alt="{{ $childCategory->name }}">
+                                                    </div>
+                                                    <div class="service-item-wrap">
+                                                        <div class="service-icon">
+                                                            <img src="{{ $childIcon }}" alt="{{ $childCategory->name }}">
+                                                        </div>
+                                                        <div class="service-content">
+                                                            <h3 class="service-title">
+                                                                <a href="{{ route('front.services.childcategory', [
+                                                                    'category' => $currentCategory?->slug ?? '',
+                                                                    'subcategory' => $currentSubCategory?->slug ?? '',
+                                                                    'child' => $childCategory->slug
+                                                                ]) }}">{{ $childCategory->name }}</a>
+                                                            </h3>
+                                                            <p class="service-text">
+                                                                {{ Str::limit(strip_tags($childCategory->short_description ?? ''), 110) }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="col-12">
+                                                <p class="text-center">No child categories available right now.</p>
+                                            </div>
+                                        @endforelse
+                                    </div>
+                                </div>
+                                @if($subCategoryDescription)
+                                    <div class="mt-4">
+                                        <h4 class="mb-2">About {{ $subCategoryName }}</h4>
+                                        <p>{{ strip_tags($subCategoryDescription) }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </a>
             </div>
-            @endforeach
-            <!--Services Two Single End-->
         </div>
-    </div>
-</section>
-@endsection
+        <!-- service-single end-->
 
-@push('js')
-    <!--<script src="{{ asset('frontend/silck/slick.min.js') }}"></script>-->
-@endpush
+</main>
+@endsection
