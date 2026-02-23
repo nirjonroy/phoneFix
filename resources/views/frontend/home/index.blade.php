@@ -354,11 +354,7 @@
                         <div class="video-content wow fadeInRight" data-wow-delay=".25s" style="background-image: url({{ $phoneFixAsset }}/img/video/01.jpg);">
                             <div class="row align-items-center">
                                 <div class="col-lg-12">
-                                    <div class="video-wrap">
-                                        <a class="play-btn popup-youtube" href="https://www.youtube.com/watch?v=ckHzmP1evNU">
-                                            <i class="fas fa-play"></i>
-                                        </a>
-                                    </div>
+                                    <div class="video-wrap"></div>
                                 </div>
                             </div>
                         </div>
@@ -467,72 +463,31 @@
                         </div>
                         <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <ul class="filter-btns">
-                                <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> All</li>
-                                <li data-filter=".cat1"><i class="far fa-mobile"></i> Phone</li>
-                                <li data-filter=".cat2"><i class="far fa-laptop"></i> Computer</li>
-                                <li data-filter=".cat3"><i class="far fa-tv"></i> Tv</li>
-                                <li data-filter=".cat4"><i class="far fa-tablet"></i> Tablet</li>
-                                <li data-filter=".cat5"><i class="far fa-microchip"></i> Gadget</li>
+                                <li class="active" data-filter="*"><i class="far fa-layer-group"></i> All</li>
+                                @foreach ($galleryCategories as $galleryCategory)
+                                    <li data-filter=".cat-{{ $galleryCategory->id }}"><i class="far fa-folder"></i> {{ $galleryCategory->name }}</li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="col-md-4 filter-item cat3 cat4 cat5">
-                        <div class="gallery-item">
-                            <div class="gallery-img">
-                                <img src="{{ $phoneFixAsset }}/img/gallery/03.jpg" alt="">
-                            </div>
-                            <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="{{ $phoneFixAsset }}/img/gallery/03.jpg"><i
-                                        class="far fa-plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 filter-item cat1 cat2">
-                        <div class="gallery-item">
-                            <div class="gallery-img">
-                                <img src="{{ $phoneFixAsset }}/img/gallery/01.jpg" alt="">
-                            </div>
-                            <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="{{ $phoneFixAsset }}/img/gallery/01.jpg"><i
-                                        class="far fa-plus"></i></a>
+                    @forelse ($galleryItems as $galleryItem)
+                        <div class="col-md-4 filter-item cat-{{ $galleryItem['category_id'] }}">
+                            <div class="gallery-item">
+                                <div class="gallery-img">
+                                    <img src="{{ asset($galleryItem['image']) }}" alt="{{ $galleryItem['name'] }}">
+                                </div>
+                                <div class="gallery-content">
+                                    <a class="popup-img gallery-link" href="{{ asset($galleryItem['image']) }}"><i class="far fa-plus"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 filter-item cat2 cat3">
-                        <div class="gallery-item">
-                            <div class="gallery-img">
-                                <img src="{{ $phoneFixAsset }}/img/gallery/02.jpg" alt="">
-                            </div>
-                            <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="{{ $phoneFixAsset }}/img/gallery/02.jpg"><i
-                                        class="far fa-plus"></i></a>
-                            </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-center mb-0">No gallery images available yet.</p>
                         </div>
-                    </div>
-                    <div class="col-md-4 filter-item cat2 cat4">
-                        <div class="gallery-item">
-                            <div class="gallery-img">
-                                <img src="{{ $phoneFixAsset }}/img/gallery/04.jpg" alt="">
-                            </div>
-                            <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="{{ $phoneFixAsset }}/img/gallery/04.jpg"><i
-                                        class="far fa-plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 filter-item cat1 cat4 cat5">
-                        <div class="gallery-item">
-                            <div class="gallery-img">
-                                <img src="{{ $phoneFixAsset }}/img/gallery/05.jpg" alt="">
-                            </div>
-                            <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="{{ $phoneFixAsset }}/img/gallery/05.jpg"><i
-                                        class="far fa-plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

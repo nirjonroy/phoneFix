@@ -55,6 +55,70 @@ class HomeController extends Controller
       	$social_links = FooterSocialLink::all();
         $about = AboutUs::first();
         $faqs = Faq::all();
+        $galleryCategories = Category::with([
+                "subCategories" => function ($query) {
+                    $query->where("status", 1)->orderBy("id", "ASC");
+                },
+                "subCategories.childCategories" => function ($query) {
+                    $query->where("status", 1)->orderBy("id", "ASC");
+                },
+            ])
+            ->where("status", 1)
+            ->orderBy("id", "ASC")
+            ->get();
+        $galleryLimit = 10;
+        $galleryItems = collect();
+        $allGalleryItems = collect();
+
+        foreach ($galleryCategories as $galleryCategory) {
+            $categoryItems = collect();
+
+            if (!empty($galleryCategory->image)) {
+                $categoryItems->push([
+                    "category_id" => $galleryCategory->id,
+                    "name" => $galleryCategory->name,
+                    "image" => $galleryCategory->image,
+                ]);
+            }
+
+            foreach ($galleryCategory->subCategories as $gallerySubCategory) {
+                if (!empty($gallerySubCategory->image)) {
+                    $categoryItems->push([
+                        "category_id" => $galleryCategory->id,
+                        "name" => $gallerySubCategory->name,
+                        "image" => $gallerySubCategory->image,
+                    ]);
+                }
+
+                foreach ($gallerySubCategory->childCategories as $galleryChildCategory) {
+                    if (!empty($galleryChildCategory->image)) {
+                        $categoryItems->push([
+                            "category_id" => $galleryCategory->id,
+                            "name" => $galleryChildCategory->name,
+                            "image" => $galleryChildCategory->image,
+                        ]);
+                    }
+                }
+            }
+
+            if ($categoryItems->isNotEmpty()) {
+                $galleryItems->push($categoryItems->first());
+            }
+
+            $allGalleryItems = $allGalleryItems->merge($categoryItems);
+        }
+
+        $galleryItems = $galleryItems->unique("image")->values();
+        $allGalleryItems = $allGalleryItems->unique("image")->values();
+
+        if ($galleryItems->count() < $galleryLimit) {
+            $remaining = $allGalleryItems->reject(function ($item) use ($galleryItems) {
+                return $galleryItems->contains("image", $item["image"]);
+            });
+            $galleryItems = $galleryItems->merge($remaining);
+        }
+
+        $galleryItems = $galleryItems->take($galleryLimit)->values();
       	// dd($products);
 
         return view('frontend.home.index', compact(
@@ -67,7 +131,9 @@ class HomeController extends Controller
           		'sliders',
           		'flash_sale_products',
                 'about',
-                'faqs'));
+                'faqs',
+                'galleryCategories',
+                'galleryItems'));
     }
 
   	public function about_us_page(){
