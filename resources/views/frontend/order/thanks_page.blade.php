@@ -1,22 +1,61 @@
 @extends('frontend.app')
-@section('title', 'Home')
+@section('title', 'Appointment Confirmed')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('frontend/css/profile.css') }}">
+    <style>
+        .thank-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        .thank-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--theme-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+    </style>
 @endpush
 @section('content')
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+@endphp
+<main class="main">
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Appointment Confirmed</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">Appointment Confirmed</li>
+                </ul>
+            </div>
+        </div>
+        <!-- breadcrumb end -->
 
-<div class="container mt-10" style="padding-top: 150px">
-  <div class="row">
-      <div class="mt-4 p-5 bg-primary text-white rounded text-center" style="margin-bottom: 5%; box-shadow: 10px 10px 5px gray;">
-    <h1>Thanks For Appoinment</h1> 
-    <p>Your Appoinment Has Been Received </p> 
-    <p> We Will contact you, to ensure this Appoinment </p> 
-    
-    <a class="btn bg-dark" href="{{route('front.home')}}" style="color:white"> Back To Home  </a>
-    
-  </div>
-  </div>
-  
-</div>
-
+        <div class="contact-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="thank-card">
+                            <div class="thank-icon">
+                                <i class="far fa-check"></i>
+                            </div>
+                            <h2>Thanks For Your Appointment</h2>
+                            <p>Your appointment has been received.</p>
+                            <p>We will contact you soon to confirm the details.</p>
+                            <a href="{{ route('front.home') }}" class="theme-btn mt-3">Back To Home <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
 @endsection
