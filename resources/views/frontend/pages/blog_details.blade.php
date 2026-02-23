@@ -15,6 +15,52 @@
 @push('css')
     {{-- <link rel="stylesheet" href="{{ asset('frontend/css/home.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/food.css') }}"> --}}
+    <style>
+        .blog-share {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .blog-share-list {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            display: none;
+            gap: 8px;
+            padding: 8px 10px;
+            margin-top: 8px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            z-index: 10;
+            white-space: nowrap;
+        }
+        .blog-share-list.is-open {
+            display: inline-flex;
+        }
+        .blog-share-list a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--color-dark);
+        }
+        .blog-share-list a:hover {
+            background: var(--theme-color);
+            color: #fff;
+        }
+        @media (max-width: 991px) {
+            .blog-share-list {
+                right: auto;
+                left: 0;
+            }
+        }
+    </style>
 @endpush
 
 @section('seos')
@@ -66,6 +112,10 @@
     $blogDate = $blog->created_at ? $blog->created_at->format('M d, Y') : '';
     $blogAuthor = $blog->author ?: (optional($blog->admin)->name ?: 'Admin');
     $recentPosts = \App\Models\Blog::latest()->where('id', '!=', $blog->id)->take(3)->get();
+    $shareUrl = url()->current();
+    $shareTitle = $blog->title;
+    $shareUrlEncoded = urlencode($shareUrl);
+    $shareTitleEncoded = urlencode($shareTitle);
 @endphp
 <main class="main">
 
@@ -104,7 +154,17 @@
                                             </ul>
                                         </div>
                                         <div class="blog-meta-right">
-                                            <a href="#" class="share-link"><i class="far fa-share-alt"></i>Share</a>
+                                            <div class="blog-share">
+                                                <a href="#" class="share-link js-share-toggle" data-title="{{ $shareTitle }}" data-url="{{ $shareUrl }}">
+                                                    <i class="far fa-share-alt"></i>Share
+                                                </a>
+                                                <div class="blog-share-list">
+                                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrlEncoded }}" target="_blank" rel="noopener" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                                                    <a href="https://twitter.com/intent/tweet?url={{ $shareUrlEncoded }}&text={{ $shareTitleEncoded }}" target="_blank" rel="noopener" title="Share on X"><i class="fab fa-x-twitter"></i></a>
+                                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrlEncoded }}" target="_blank" rel="noopener" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                                    <a href="https://api.whatsapp.com/send?text={{ $shareTitleEncoded }}%20{{ $shareUrlEncoded }}" target="_blank" rel="noopener" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="blog-details">
@@ -158,15 +218,7 @@
                                     <button type="submit"><i class="far fa-search"></i></button>
                                 </form>
                             </div>
-                            <!-- category -->
-                            <div class="widget category">
-                                <h5 class="widget-title">Category</h5>
-                                <div class="category-list">
-                                    @foreach(\App\Models\BlogCategory::withCount('blogs')->get() as $category)
-                                        <a href="#"><i class="far fa-angle-double-right"></i>{{ $category->name }}<span>({{ $category->blogs_count }})</span></a>
-                                    @endforeach
-                                </div>
-                            </div>
+                            <!-- category removed -->
                             <!-- recent post -->
                             <div class="widget recent-post">
                                 <h5 class="widget-title">Recent Post</h5>
@@ -231,4 +283,33 @@
         <!-- blog single area end -->
 
 </main>
+@push('js')
+    <script>
+        document.addEventListener('click', function (event) {
+            var toggle = event.target.closest('.js-share-toggle');
+            var shareLists = document.querySelectorAll('.blog-share-list');
+
+            if (!toggle) {
+                shareLists.forEach(function (list) {
+                    list.classList.remove('is-open');
+                });
+                return;
+            }
+
+            event.preventDefault();
+            var shareTitle = toggle.dataset.title || document.title;
+            var shareUrl = toggle.dataset.url || window.location.href;
+
+            if (navigator.share) {
+                navigator.share({ title: shareTitle, url: shareUrl }).catch(function () {});
+                return;
+            }
+
+            var list = toggle.parentElement.querySelector('.blog-share-list');
+            if (list) {
+                list.classList.toggle('is-open');
+            }
+        });
+    </script>
+@endpush
 @endsection
