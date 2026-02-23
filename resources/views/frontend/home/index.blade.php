@@ -569,75 +569,42 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                            <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 16, 2024</span>
-                            <div class="blog-item-img">
-                                <img src="{{ $phoneFixAsset }}/img/blog/01.jpg" alt="Thumb">
-                            </div>
-                            <div class="blog-item-info">
-                                <h4 class="blog-title">
-                                    <a href="{{ route('front.blog') }}">There are many variation of passage available suffer</a>
-                                </h4>
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                    </ul>
+                    @forelse($homeBlogs as $blog)
+                        @php
+                            $blogImage = $blog->image ? asset($blog->image) : $phoneFixAsset . '/img/blog/01.jpg';
+                            $blogDate = $blog->created_at ? $blog->created_at->format('M d, Y') : '';
+                            $blogAuthor = $blog->author ?: (optional($blog->admin)->name ?: 'Admin');
+                        @endphp
+                        <div class="col-md-6 col-lg-4">
+                            <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 3)), 2) }}s">
+                                @if($blogDate)
+                                    <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blogDate }}</span>
+                                @endif
+                                <div class="blog-item-img">
+                                    <img src="{{ $blogImage }}" alt="{{ $blog->title }}">
                                 </div>
-                                <p>
-                                    There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                                </p>
-                                <a class="theme-btn" href="{{ route('front.blog') }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                <div class="blog-item-info">
+                                    <h4 class="blog-title">
+                                        <a href="{{ route('front.blog_details', $blog->slug) }}">{{ $blog->title }}</a>
+                                    </h4>
+                                    <div class="blog-item-meta">
+                                        <ul>
+                                            <li><a href="#"><i class="far fa-user-circle"></i> By {{ $blogAuthor }}</a></li>
+                                            <li><a href="#"><i class="far fa-comments"></i> {{ $blog->comments_count }} Comments</a></li>
+                                        </ul>
+                                    </div>
+                                    <p>
+                                        {{ Str::limit(strip_tags($blog->description ?? ''), 120) }}
+                                    </p>
+                                    <a class="theme-btn" href="{{ route('front.blog_details', $blog->slug) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                            <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 18, 2024</span>
-                            <div class="blog-item-img">
-                                <img src="{{ $phoneFixAsset }}/img/blog/02.jpg" alt="Thumb">
-                            </div>
-                            <div class="blog-item-info">
-                                <h4 class="blog-title">
-                                    <a href="{{ route('front.blog') }}">It is a long established fact that will be distracted</a>
-                                </h4>
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                    </ul>
-                                </div>
-                                <p>
-                                    There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                                </p>
-                                <a class="theme-btn" href="{{ route('front.blog') }}">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-center mb-0">No blog posts found.</p>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                            <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 20, 2024</span>
-                            <div class="blog-item-img">
-                                <img src="{{ $phoneFixAsset }}/img/blog/03.jpg" alt="Thumb">
-                            </div>
-                            <div class="blog-item-info">
-                                <h4 class="blog-title">
-                                    <a href="{{ route('front.blog') }}">All the generators on the tend to repeat predefined chunks</a>
-                                </h4>
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                    </ul>
-                                </div>
-                                <p>
-                                    There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                                </p>
-                                <a class="theme-btn" href="{{ route('front.blog') }}">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

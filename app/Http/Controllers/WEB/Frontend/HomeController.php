@@ -55,6 +55,20 @@ class HomeController extends Controller
       	$social_links = FooterSocialLink::all();
         $about = AboutUs::first();
         $faqs = Faq::all();
+        $homeBlogs = Blog::with("admin")
+            ->withCount("comments")
+            ->where("status", 1)
+            ->where("show_homepage", 1)
+            ->latest()
+            ->take(6)
+            ->get();
+        if ($homeBlogs->isEmpty()) {
+            $homeBlogs = Blog::with("admin")
+                ->withCount("comments")
+                ->latest()
+                ->take(6)
+                ->get();
+        }
         $galleryCategories = Category::with([
                 "subCategories" => function ($query) {
                     $query->where("status", 1)->orderBy("id", "ASC");
@@ -129,9 +143,10 @@ class HomeController extends Controller
                 'title',
           		'social_links',
           		'sliders',
-          		'flash_sale_products',
+                'flash_sale_products',
                 'about',
                 'faqs',
+                'homeBlogs',
                 'galleryCategories',
                 'galleryItems'));
     }
