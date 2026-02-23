@@ -369,89 +369,6 @@
         <!-- video area end -->
 
 
-        <!-- pricing-area -->
-        <div class="pricing-area bg py-80">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Pricing</span>
-                            <h2 class="site-title">Our Pricing <span>Plan</span></h2>
-                            <div class="heading-divider"></div>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                            <div class="pricing-header">
-                                <h4>Basic</h4>
-                                <div class="pricing-price">
-                                    <h1 class="pricing-amount">$59.66</h1>
-                                    <p>One Time Payment</p>
-                                </div>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>Unlimited Data Recovery</li>
-                                    <li>Data Security And Backup</li>
-                                    <li>Operating System Installation</li>
-                                    <li>Unlimited Support Tickets</li>
-                                    <li>24/7 Customer Support</li>
-                                </ul>
-                                <a href="{{ route('front.repair.all') }}" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                            <div class="pricing-header">
-                                <h4>Enterprise</h4>
-                                <div class="pricing-price">
-                                    <h1 class="pricing-amount">$120.78</h1>
-                                    <p>One Time Payment</p>
-                                </div>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>Unlimited Data Recovery</li>
-                                    <li>Data Security And Backup</li>
-                                    <li>Operating System Installation</li>
-                                    <li>Unlimited Support Tickets</li>
-                                    <li>24/7 Customer Support</li>
-                                </ul>
-                                <a href="{{ route('front.repair.all') }}" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                            <div class="pricing-header">
-                                <h4>Premium</h4>
-                                <div class="pricing-price">
-                                    <h1 class="pricing-amount">$150.96</h1>
-                                    <p>One Time Payment</p>
-                                </div>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>Unlimited Data Recovery</li>
-                                    <li>Data Security And Backup</li>
-                                    <li>Operating System Installation</li>
-                                    <li>Unlimited Support Tickets</li>
-                                    <li>24/7 Customer Support</li>
-                                </ul>
-                                <a href="{{ route('front.repair.all') }}" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- pricing-area end -->
-
-
         <!-- choose area -->
         <div class="choose-area py-120">
             <div class="container">
@@ -678,101 +595,6 @@
         <!-- gallery-area end -->
 
 
-        <!-- team-area -->
-        <div class="team-area bg pt-80 pb-20">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Team</span>
-                            <h2 class="site-title">Meet Our Experts <span>Team</span></h2>
-                            <div class="heading-divider"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                            <div class="team-img">
-                                <img src="{{ $phoneFixAsset }}/img/team/01.jpg" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Chad Smith</a></h5>
-                                    <span>Technician</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                            <div class="team-img">
-                                <img src="{{ $phoneFixAsset }}/img/team/02.jpg" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Arron Rodri</a></h5>
-                                    <span>CEO & Founder</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                            <div class="team-img">
-                                <img src="{{ $phoneFixAsset }}/img/team/03.jpg" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Malissa Fie</a></h5>
-                                    <span>Technician</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                            <div class="team-img">
-                                <img src="{{ $phoneFixAsset }}/img/team/04.jpg" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Tony Pinto</a></h5>
-                                    <span>Technician</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- team-area end -->
-
-
         <!-- faq area -->
         <div class="faq-area py-120">
             <div class="container">
@@ -790,46 +612,41 @@
                                 <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Faq's</span>
                                 <h2 class="site-title my-3">General <span>frequently</span> asked questions</h2>
                             </div>
-                            <p class="about-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form by injected.</p>
+                            <p class="about-text">Find quick answers to the most common questions about our repair services.</p>
                             <div class="mt-4">
                                 <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                <span><i class="far fa-question"></i></span> What Are The Charges Of Services ?
-                                            </button>
-                                        </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desirente odio dignissim quam.
+                                    @forelse($faqs as $index => $faq)
+                                        @php
+                                            $headingId = 'headingFaq' . $index;
+                                            $collapseId = 'collapseFaq' . $index;
+                                            $isOpen = $index === 0;
+                                        @endphp
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="{{ $headingId }}">
+                                                <button class="accordion-button {{ $isOpen ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $collapseId }}" aria-expanded="{{ $isOpen ? 'true' : 'false' }}" aria-controls="{{ $collapseId }}">
+                                                    <span><i class="far fa-question"></i></span> {{ $faq->question }}
+                                                </button>
+                                            </h2>
+                                            <div id="{{ $collapseId }}" class="accordion-collapse collapse {{ $isOpen ? 'show' : '' }}" aria-labelledby="{{ $headingId }}" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    {!! $faq->answer !!}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                <span><i class="far fa-question"></i></span> How Can I Become A Member
-                                                ?
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desirente odio dignissim quam.
+                                    @empty
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingFaqEmpty">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFaqEmpty" aria-expanded="true" aria-controls="collapseFaqEmpty">
+                                                    <span><i class="far fa-question"></i></span> No FAQs available yet
+                                                </button>
+                                            </h2>
+                                            <div id="collapseFaqEmpty" class="accordion-collapse collapse show" aria-labelledby="headingFaqEmpty" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    Check back soon or contact us for more information.
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingThree">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                <span><i class="far fa-question"></i></span> What Payment Gateway You Support ?
-                                            </button>
-                                        </h2>
-                                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desirente odio dignissim quam.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
@@ -1076,22 +893,6 @@
         </div>
         <!-- blog-area end -->
 
-
-        <!-- partner area -->
-        <div class="partner-area bg pt-50 pb-50">
-            <div class="container">
-                <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                    <img src="{{ $phoneFixAsset }}/img/partner/01.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/02.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/03.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/04.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/05.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/06.png" alt="thumb">
-                    <img src="{{ $phoneFixAsset }}/img/partner/03.png" alt="thumb">
-                </div>
-            </div>
-        </div>
-        <!-- partner area end -->
 
 </main>
 @endsection

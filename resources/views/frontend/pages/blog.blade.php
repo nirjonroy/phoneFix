@@ -53,54 +53,67 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 @endsection
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url({{asset('frontend/assets/images/about_bg.webp')}})">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>Blog</h1>
-
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="{{route('front.home')}}">Home</a></li>
-                <li><span>//</span></li>
-                <li>Blog Us</li>
-            </ul>
-        </div>
-    </div>
-</section>
-<!--Page Header End-->
-
-<!--About Two Start-->
-<section class="about-two about-page">
-    <div class="container">
-        <div class="row g-4">
-            @foreach($blog as $b)
-            <div class="col-xl-4 col-lg-4 col-md-6">
-                <article class="blog-card">
-                    <a href="{{route('front.blog_details', [$b->slug])}}" class="blog-card__image-link">
-                        <img src="{{asset($b->image)}}" alt="{{ $b->title }}" class="img-fluid">
-                    </a>
-                    <div class="blog-card__body">
-                        <h3 class="blog-card__title">
-                            <a href="{{route('front.blog_details', [$b->slug])}}">{{$b->title}}</a>
-                        </h3>
-                        <p class="blog-card__excerpt">
-                            {!! Str::limit($b->description, 100, ' ...') !!}
-                        </p>
-                        <a href="{{route('front.blog_details', [$b->slug])}}" class="thm-btn">Learn More</a>
-                    </div>
-                </article>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Our Blog</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">Our Blog</li>
+                </ul>
             </div>
-            @endforeach
         </div>
-    </div>
-</section>
-<!--About Two End-->
+        <!-- breadcrumb end -->
+
+
+        <!-- blog-area -->
+        <div class="blog-area py-120">
+            <div class="container">
+                <div class="row">
+                    @forelse($blog as $b)
+                        @php
+                            $blogImage = $b->image ? asset($b->image) : $phoneFixAsset . '/img/blog/01.jpg';
+                            $blogDate = $b->created_at ? $b->created_at->format('M d, Y') : '';
+                            $blogAuthor = optional($b->admin)->name ?: 'Admin';
+                        @endphp
+                        <div class="col-md-6 col-lg-4">
+                            <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 3)), 2) }}s">
+                                @if($blogDate)
+                                    <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blogDate }}</span>
+                                @endif
+                                <div class="blog-item-img">
+                                    <img src="{{ $blogImage }}" alt="{{ $b->title }}">
+                                </div>
+                                <div class="blog-item-info">
+                                    <h4 class="blog-title">
+                                        <a href="{{ route('front.blog_details', $b->slug) }}">{{ $b->title }}</a>
+                                    </h4>
+                                    <div class="blog-item-meta">
+                                        <ul>
+                                            <li><a href="#"><i class="far fa-user-circle"></i> By {{ $blogAuthor }}</a></li>
+                                        </ul>
+                                    </div>
+                                    <p>
+                                        {{ Str::limit(strip_tags($b->description ?? ''), 120) }}
+                                    </p>
+                                    <a class="theme-btn" href="{{ route('front.blog_details', $b->slug) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-center">No blog posts found.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+        <!-- blog-area end -->
+
+</main>
 @endsection

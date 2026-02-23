@@ -5,106 +5,124 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/food.css') }}"> --}}
 @endpush
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+    $setting = siteInfo();
+    $contactPhone = $setting->topbar_phone ?? '';
+    $contactTel = $contactPhone ? preg_replace('/[^0-9+]/', '', $contactPhone) : '';
+    $contactEmail = $setting->contact_email ?? $setting->topbar_email ?? '';
+    $contactAddress = trim(($setting->address_1 ?? '') . ' ' . ($setting->address_2 ?? ''));
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url({{asset('frontend/assets/images/contact-one-bg.jpg')}})">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>Contact Us</h1>
-            <p>Professional Smartphone Laptop Repair Services </p>
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="{{route('front.home')}}">Home</a></li>
-                <li><span>//</span></li>
-                <li>Contact Us</li>
-            </ul>
-        </div>
-    </div>
-</section>
-<!--Page Header End-->
-
-<!--Contact Page Start-->
-<section class="contact-page">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-6 col-lg-6">
-                <div class="contact-page__left">
-                    <div class="contact-page__shape-1">
-                        <img src="assets/images/shapes/contact-page-shape-1.png" alt="">
-                    </div>
-                    <h3 class="contact-page__title">Leave a message</h3>
-                    <form action="{{route('front.direct-message')}}"  method="post">
-                        @csrf
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="contact-page__form-input-box">
-                                    <input type="text" placeholder="Name" name="name">
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="contact-page__form-input-box">
-                                    <input type="email" placeholder="Email" name="email">
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="contact-page__form-input-box">
-                                    <input type="text" placeholder="Subject" name="subject">
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="contact-page__form-input-box">
-                                    <input type="text" placeholder="Phone" name="phone">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="contact-page__form-input-box text-message-box">
-                                    <textarea name="message" placeholder="Comment"></textarea>
-                                </div>
-                                <div class="contact-form__btn-box">
-                            <button type="submit" class="thm-btn contact-form__btn">Send Message</button>
-                        </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-xl-6 col-lg-6">
-                <div class="contact-page__right">
-                    <div class="section-title text-left">
-                        <span class="section-title__tagline">GET IN TOUCH</span>
-                        <h2 class="section-title__title">{{$contacts->title}}</h2>
-                    </div>
-                    {{-- <p class="contact-page__right-text">Duis aute irure dolor in repreh enderit in volup tate cillum dolore eu fugiat nulla dolor atur with Lorem ipsum is simply free market web bites eius mod ut labore duis</p> --}}
-                    <div class="contact-page__points-box-inner">
-                        <div class="contact-page__points-box">
-
-                           {!!$contacts->description!!}
-                        </div>
-
-                    </div>
-                </div>
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Contact Us</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li class="active">Contact Us</li>
+                </ul>
             </div>
         </div>
-    </div>
-</section>
-<!--Contact Page End-->
-
-<!--Google Map Start-->
-<section class="google-map">
-    <div class="container">
-        <iframe src="{{$contacts->map}}"
-            class="google-map__one" allowfullscreen></iframe>
-    </div>
-</section>
-<!--Google Map End-->
+        <!-- breadcrumb end -->
 
 
+
+        <!-- contact area -->
+        <div class="contact-area py-120">
+            <div class="container">
+                <div class="contact-wrap">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="contact-content">
+                                <div class="contact-info">
+                                    <div class="contact-info-icon">
+                                        <i class="fal fa-location-dot"></i>
+                                    </div>
+                                    <div class="contact-info-content">
+                                        <h5>Office Address</h5>
+                                        <p>{{ $contactAddress ?: '25/B Milford, New York, USA' }}</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="contact-info-icon">
+                                        <i class="fal fa-phone-volume"></i>
+                                    </div>
+                                    <div class="contact-info-content">
+                                        <h5>Call Us</h5>
+                                        <p>{{ $contactPhone ?: '+2 123 4565 789' }}</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="contact-info-icon">
+                                        <i class="fal fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-info-content">
+                                        <h5>Email Us</h5>
+                                        @if($contactEmail)
+                                            <p><a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a></p>
+                                        @else
+                                            <p>info@example.com</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="contact-info border-0">
+                                    <div class="contact-info-icon">
+                                        <i class="fal fa-clock"></i>
+                                    </div>
+                                    <div class="contact-info-content">
+                                        <h5>Open Time</h5>
+                                        <p>Mon - Sat (10.00AM - 05.30PM)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="contact-form">
+                                <div class="contact-form-header">
+                                    <h2>Get In Touch</h2>
+                                    <p>{!! $contacts->description ?? 'It is a long established fact that a reader will be distracted by the readable content of a page.' !!}</p>
+                                </div>
+                                <form method="post" action="{{ route('front.direct-message') }}" id="contact-form">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" name="email" placeholder="Your Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="subject" placeholder="Your Subject">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="message" cols="30" rows="5" class="form-control" placeholder="Write Your Message" required></textarea>
+                                    </div>
+                                    <button type="submit" class="theme-btn">Send
+                                        Message <i class="far fa-paper-plane"></i></button>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="form-messege text-success"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end contact area -->
+
+        <!-- map -->
+        <div class="contact-map">
+            <iframe src="{{ $contacts->map ?? '' }}" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+
+</main>
 @endsection

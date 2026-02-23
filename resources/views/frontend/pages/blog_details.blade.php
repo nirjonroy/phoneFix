@@ -60,52 +60,175 @@
 @endsection
 
 @section('content')
-<div class="stricky-header stricked-menu main-menu main-menu-two">
-    <div class="sticky-header__content"></div>
-    <!-- /.sticky-header__content -->
-</div>
-<!-- /.stricky-header -->
+@php
+    $phoneFixAsset = asset('phone-fix/assets');
+    $blogImage = $blog->image ? asset($blog->image) : $phoneFixAsset . '/img/blog/single.jpg';
+    $blogDate = $blog->created_at ? $blog->created_at->format('M d, Y') : '';
+    $blogAuthor = $blog->author ?: (optional($blog->admin)->name ?: 'Admin');
+    $recentPosts = \App\Models\Blog::latest()->where('id', '!=', $blog->id)->take(3)->get();
+@endphp
+<main class="main">
 
-<!--Page Header Start-->
-<section class="page-header">
-    <div class="page-header-bg" style="background-image: url({{asset('frontend/assets/images/about_bg.webp')}})">
-    </div>
-    <div class="container">
-        <div class="page-header__inner">
-            <h1>{{ $blog->title }}</h1>
-
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="{{route('front.home')}}">Home</a></li>
-                <li><span>//</span></li>
-                <li>Blog Us</li>
-            </ul>
-        </div>
-    </div>
-</section>
-<!--Page Header End-->
-
-<!--About Two Start-->
-<section class="about-two about-page">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-xl-12 col-lg-12">
-
-                <div class="about-two__right">
-                    <div class="section-title text-left">
-                        <img src="{{asset($blog->image)}}" alt="" class="img-fluid rounded float-left" style="width: 100%; height: auto">
-                        <h2 class="section-title__title">{{$blog->title}}</h2>
-                    </div>
-                    <div class="about-two__text-1 blog-details__content">
-                        {!! $blog->description !!}
-                    </div>
-
-
-                </div>
-
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url({{ $phoneFixAsset }}/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ $blog->title }}</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{{ route('front.home') }}">Home</a></li>
+                    <li><a href="{{ route('front.blog') }}">Blog</a></li>
+                    <li class="active">{{ $blog->title }}</li>
+                </ul>
             </div>
         </div>
-    </div>
-</section>
-<!--About Two End-->
+        <!-- breadcrumb end -->
+
+
+        <!-- blog single area -->
+        <div class="blog-single-area pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="blog-single-wrap">
+                            <div class="blog-single-content">
+                                <div class="blog-thumb-img">
+                                    <img src="{{ $blogImage }}" alt="{{ $blog->title }}">
+                                </div>
+                                <div class="blog-info">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <ul>
+                                                <li><i class="far fa-user"></i><a href="#">{{ $blogAuthor }}</a></li>
+                                                @if($blogDate)
+                                                    <li><i class="far fa-clock"></i>{{ $blogDate }}</li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <a href="#" class="share-link"><i class="far fa-share-alt"></i>Share</a>
+                                        </div>
+                                    </div>
+                                    <div class="blog-details">
+                                        <h3 class="blog-details-title mb-20">{{ $blog->title }}</h3>
+                                        <div class="mb-10 blog-details__content">
+                                            {!! $blog->description !!}
+                                        </div>
+                                        <hr>
+                                        @if($blog->tags)
+                                            <div class="blog-details-tags pb-20">
+                                                <h5>Tags : </h5>
+                                                <ul>
+                                                    @foreach(explode(',', $blog->tags) as $tag)
+                                                        @php $tag = trim($tag); @endphp
+                                                        @if($tag)
+                                                            <li><a href="#">{{ $tag }}</a></li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="blog-author">
+                                    <div class="blog-author-img">
+                                        <img src="{{ $phoneFixAsset }}/img/blog/author.jpg" alt="{{ $blogAuthor }}">
+                                    </div>
+                                    <div class="author-info">
+                                        <h6>Author</h6>
+                                        <h3 class="author-name">{{ $blogAuthor }}</h3>
+                                        <p>Thanks for reading! We share repair tips, device care advice, and updates from our team.</p>
+                                        <div class="author-social">
+                                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="#"><i class="fab fa-x-twitter"></i></a>
+                                            <a href="#"><i class="fab fa-instagram"></i></a>
+                                            <a href="#"><i class="fab fa-whatsapp"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <aside class="sidebar">
+                            <!-- search-->
+                            <div class="widget search">
+                                <h5 class="widget-title">Search</h5>
+                                <form class="search-form" action="{{ route('front.blog') }}">
+                                    <input type="text" class="form-control" placeholder="Search Here...">
+                                    <button type="submit"><i class="far fa-search"></i></button>
+                                </form>
+                            </div>
+                            <!-- category -->
+                            <div class="widget category">
+                                <h5 class="widget-title">Category</h5>
+                                <div class="category-list">
+                                    @foreach(\App\Models\BlogCategory::withCount('blogs')->get() as $category)
+                                        <a href="#"><i class="far fa-angle-double-right"></i>{{ $category->name }}<span>({{ $category->blogs_count }})</span></a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <!-- recent post -->
+                            <div class="widget recent-post">
+                                <h5 class="widget-title">Recent Post</h5>
+                                @foreach($recentPosts as $recent)
+                                    @php
+                                        $recentImage = $recent->image ? asset($recent->image) : $phoneFixAsset . '/img/blog/bs-1.jpg';
+                                        $recentDate = $recent->created_at ? $recent->created_at->format('M d, Y') : '';
+                                    @endphp
+                                    <div class="recent-post-single">
+                                        <div class="recent-post-img">
+                                            <img src="{{ $recentImage }}" alt="{{ $recent->title }}">
+                                        </div>
+                                        <div class="recent-post-bio">
+                                            <h6><a href="{{ route('front.blog_details', $recent->slug) }}">{{ $recent->title }}</a></h6>
+                                            @if($recentDate)
+                                                <span><i class="far fa-clock"></i>{{ $recentDate }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+
+                            <!-- social share -->
+                            <div class="widget social-share">
+                                <h5 class="widget-title">Follow Us</h5>
+                                <div class="social-share-link">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-dribbble"></i></a>
+                                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="#"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+
+
+                            <!-- Recent Post -->
+                            <div class="widget sidebar-tag">
+                                <h5 class="widget-title">Popular Tags</h5>
+                                <div class="tag-list">
+                                    @if($blog->tags)
+                                        @foreach(explode(',', $blog->tags) as $tag)
+                                            @php $tag = trim($tag); @endphp
+                                            @if($tag)
+                                                <a href="#">{{ $tag }}</a>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <a href="#">Repair</a>
+                                        <a href="#">Mobile</a>
+                                        <a href="#">Phone</a>
+                                        <a href="#">Desktop</a>
+                                        <a href="#">Computer</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- blog single area end -->
+
+</main>
 @endsection
