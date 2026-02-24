@@ -195,7 +195,9 @@
                                                 @endphp
                                                 <div class="solution-item">
                                                     <div class="solution-icon">
-                                                        <img src="{{ $solutionImage }}" alt="{{ $service->name }}">
+                                                        <a href="{{ $solutionLink }}">
+                                                            <img src="{{ $solutionImage }}" alt="{{ $service->name }}">
+                                                        </a>
                                                     </div>
                                                     <div class="solution-content">
                                                         <h5><a href="{{ $solutionLink }}">{{ $service->name }}</a></h5>

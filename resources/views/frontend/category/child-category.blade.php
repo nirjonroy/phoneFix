@@ -128,7 +128,13 @@
                                             <div class="col-md-6 col-lg-6">
                                                 <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 2)), 2) }}s">
                                                     <div class="service-img">
-                                                        <img src="{{ $childImage }}" alt="{{ $childCategory->name }}">
+                                                        <a href="{{ route('front.services.childcategory', [
+                                                                    'category' => $currentCategory?->slug ?? '',
+                                                                    'subcategory' => $currentSubCategory?->slug ?? '',
+                                                                    'child' => $childCategory->slug
+                                                                ]) }}">
+                                                            <img src="{{ $childImage }}" alt="{{ $childCategory->name }}">
+                                                        </a>
                                                     </div>
                                                     <div class="service-item-wrap">
                                                         <div class="service-icon">

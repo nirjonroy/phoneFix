@@ -115,7 +115,7 @@
                         <div class="col-xl-8 col-lg-8">
                             <div class="service-details">
                                 <div class="mb-4">
-                                    <h3 class="mb-2">{{ $categoryName }} Sub Categories</h3>
+                                    <h3 class="mb-2">{{ $categoryName }}</h3>
                                     <p>Select a sub category to see all available child services.</p>
                                 </div>
                                 <div class="service-area2">
@@ -128,7 +128,9 @@
                                             <div class="col-md-6 col-lg-6">
                                                 <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ number_format(0.25 + (0.25 * ($loop->index % 2)), 2) }}s">
                                                     <div class="service-img">
-                                                        <img src="{{ $subImage }}" alt="{{ $subCategory->name }}">
+                                                        <a href="{{ route('front.services.subcategory', ['category' => $subCategory->category->slug, 'subcategory' => $subCategory->slug]) }}">
+                                                            <img src="{{ $subImage }}" alt="{{ $subCategory->name }}">
+                                                        </a>
                                                     </div>
                                                     <div class="service-item-wrap">
                                                         <div class="service-icon">

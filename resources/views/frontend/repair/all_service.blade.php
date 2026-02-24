@@ -92,7 +92,9 @@
                         <div class="col-md-6 col-lg-4">
                             <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="{{ $delay }}s">
                                 <div class="service-img">
-                                    <img src="{{ $serviceImage }}" alt="{{ $item->name }}">
+                                    <a href="{{ route('front.services.category', ['category' => $item->slug]) }}">
+                                        <img src="{{ $serviceImage }}" alt="{{ $item->name }}">
+                                    </a>
                                 </div>
                                 <div class="service-item-wrap">
                                     <div class="service-icon">
