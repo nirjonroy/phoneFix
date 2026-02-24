@@ -1,8 +1,10 @@
 @php
     $setting = siteInfo();
-    $headerPhone = $setting->topbar_phone ?? '';
+    $contactInfo = \App\Models\ContactPage::first();
+    $headerPhone = $contactInfo->phone ?? ($setting->topbar_phone ?? '');
     $headerTel = $headerPhone ? preg_replace('/[^0-9+]/', '', $headerPhone) : '';
-    $headerEmail = $setting->topbar_email ?: ($setting->contact_email ?? '');
+    $headerEmail = $contactInfo->email ?? ($setting->topbar_email ?: ($setting->contact_email ?? ''));
+    $socialLinks = \App\Models\FooterSocialLink::all();
 @endphp
 
 <!-- preloader -->
@@ -24,10 +26,11 @@
                 <div class="header-top-left">
                     <div class="header-top-social">
                         <span>Follow Us:</span>
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-x-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        @foreach($socialLinks as $socialLink)
+                            <a href="{{ $socialLink->link }}" target="_blank" rel="noopener">
+                                <i class="{{ $socialLink->icon }}"></i>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
                 <div class="header-top-right">

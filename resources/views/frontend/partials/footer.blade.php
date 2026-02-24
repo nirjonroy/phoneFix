@@ -1,13 +1,10 @@
 @php
     $setting = siteInfo();
-    $footerPhone = $setting->topbar_phone ?? '';
+    $contactInfo = \App\Models\ContactPage::first();
+    $footerPhone = $contactInfo->phone ?? ($setting->topbar_phone ?? '');
     $footerTel = $footerPhone ? preg_replace('/[^0-9+]/', '', $footerPhone) : '';
-    $footerEmail = $setting->contact_email ?? $setting->topbar_email ?? '';
-    $addressParts = array_filter([
-        $setting->address_1 ?? null,
-        $setting->address_2 ?? null,
-    ]);
-    $footerAddress = $addressParts ? implode(' ', $addressParts) : '25/B Milford Road, New York';
+    $footerEmail = $contactInfo->email ?? ($setting->contact_email ?? $setting->topbar_email ?? '');
+    $footerAddress = $contactInfo->address ?? '';
     $phoneFixAsset = asset('phone-fix/assets');
 @endphp
 
@@ -19,11 +16,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="footer-widget-box about-us">
                         <a href="{{ route('front.home') }}" class="footer-logo">
-                            <img src="{{ asset($setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}">
+                            <img src="{{ asset($setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}" style="width: 50px;">
                         </a>
-                        <p class="mb-4">
-                            We are many variations of passages available but the majority have suffered alteration in some form by injected humour words believable.
-                        </p>
                         <ul class="footer-contact">
                             @if($footerPhone)
                                 <li><a href="{{ $footerTel ? 'tel:' . $footerTel : '#' }}"><i class="far fa-phone"></i>{{ $footerPhone }}</a></li>
@@ -82,16 +76,27 @@
             <div class="row">
                 <div class="col-md-6 align-self-center">
                     <p class="copyright-text">
-                        &copy; Copyright <span id="date"></span> <a href="{{ route('front.home') }}"> {{ $setting->site_name ?? 'Reparo' }} </a> All Rights Reserved.
+                        &copy; Copyright <span id="date"></span>
+                        <a href="{{ route('front.home') }}"> Phone fix </a>
+                        All Rights Reserved. Developed by
+                        <a href="https://blacktechcorp.com/" target="_blank" rel="noopener">Blacktech</a>.
                     </p>
                 </div>
                 <div class="col-md-6 align-self-center">
-                    <ul class="footer-social">
-                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="#"><i class="fab fa-x-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                    </ul>
+                    @php
+                        $socialLinks = \App\Models\FooterSocialLink::all();
+                    @endphp
+                    @if($socialLinks->count())
+                        <ul class="footer-social">
+                            @foreach($socialLinks as $socialLink)
+                                <li>
+                                    <a href="{{ $socialLink->link }}" target="_blank" rel="noopener">
+                                        <i class="{{ $socialLink->icon }}"></i>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>
