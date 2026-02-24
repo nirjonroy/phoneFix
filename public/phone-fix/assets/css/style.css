@@ -1009,7 +1009,7 @@ label {
 }
 
 .navbar-brand img {
-    width: 180px;
+    width: 80px;
 }
 
 .navbar .dropdown-toggle::after {
@@ -1152,7 +1152,7 @@ label {
         margin-right: 15px !important;
     }
     .navbar.fixed-top .navbar-brand img {
-        width: 130px;
+        width: 80px;
     }
     .nav-right {
         margin-left: 15px !important;
@@ -1191,7 +1191,7 @@ label {
         background: var(--color-white);
     }
     .navbar-brand img {
-        width: 130px;
+        width: 80px;
     }
     .navbar .offcanvas {
         width: 300px;
